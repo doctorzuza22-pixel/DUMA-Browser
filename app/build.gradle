@@ -1,0 +1,20 @@
+plugins { id 'com.android.application' }
+android {
+    compileSdk 34
+    namespace 'com.duma.browser'
+    defaultConfig {
+        applicationId "com.duma.browser"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0 DUMA"
+    }
+    buildTypes {
+        release { minifyEnabled false }
+        debug { minifyEnabled false }
+    }
+}
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+}
