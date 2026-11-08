@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
         });
         root.addView(webView,new LinearLayout.LayoutParams(-1,0,1));
         LinearLayout bottom=new LinearLayout(this); bottom.setGravity(Gravity.CENTER); bottom.setBackgroundColor(Color.rgb(18,60,43));
-        addBottom(bottom,"HOME",this::showHome); addBottom(bottom,"AI",this::showAi); addBottom(bottom,"+ NEW",this::newJourney); addBottom(bottom,"SAVED",this::showSaved); addBottom(bottom,"MENU",this::showMenu);
+        addBottom(bottom,"HOME",this::showHome); addBottom(bottom,"AI",this::showAi); addBottom(bottom,"NEW JOURNEY",this::newJourney); addBottom(bottom,"SAVED",this::showSavedMenu); addBottom(bottom,"MENU",this::showMenu);
         root.addView(bottom);
         setContentView(root);
     }
@@ -177,6 +177,10 @@ public class MainActivity extends Activity {
             if(w==5)showHome();
         }).show();
     }
+    private void showSavedMenu(){
+        String[] options={"Save this page for offline reading","Open saved articles"};
+        new AlertDialog.Builder(this).setTitle("DUMA Saved").setItems(options,(d,w)->{if(w==0)saveCurrentPage();else showSaved();}).show();
+    }
     private void showSaved(){
         attachBridge();
         webView.loadDataWithBaseURL("file:///android_asset/",savedHtml(),"text/html","UTF-8",null);
@@ -201,6 +205,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void setDataSaver(boolean on){runOnUiThread(()->{dataSaver=on;prefs.edit().putBoolean("data_saver",on).apply();webView.getSettings().setLoadsImagesAutomatically(!on);});}
         @JavascriptInterface public String getSavedArticles(){return savedArray().toString();}
         @JavascriptInterface public void openSaved(int index){runOnUiThread(()->openSavedArticle(index));}
+        @JavascriptInterface public void deleteSaved(int index){runOnUiThread(()->{JSONArray old=savedArray();JSONArray next=new JSONArray();for(int i=0;i<old.length();i++)if(i!=index)next.put(old.opt(i));prefs.edit().putString("saved",next.toString()).apply();showSaved();});}
         @JavascriptInterface public void summarisePage(){runOnUiThread(()->summarisePage());}
         @JavascriptInterface public void translateCurrentPage(String lang){runOnUiThread(()->{String u="https://translate.google.com/translate?sl=auto&tl="+Uri.encode(lang)+"&u="+Uri.encode(webView.getUrl());navigate(u);});}
     }
