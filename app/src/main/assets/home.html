@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#123c2b"><title>DUMA — Browse the African Way</title>
+<style>
+:root{--bg:#f5ead2;--panel:#fff8e9;--ink:#202019;--muted:#766d5c;--gold:#e0ad35;--green:#176b45;--blue:#171d70;--red:#b72b35;--line:#dfcfac}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+body[data-theme="ubuntu"]{--bg:#f5ead2;--panel:#fff8e9;--ink:#202019;--gold:#e0ad35;--green:#176b45;--blue:#171d70}
+body[data-theme="zulu"]{--bg:#f5eadf;--panel:#fff7ed;--ink:#2b1b12;--gold:#c88728;--green:#1e583c;--blue:#142b59}
+body[data-theme="mzansi"]{--bg:#e5f1e8;--panel:#f8fff9;--ink:#153324;--gold:#e5b52e;--green:#087747;--blue:#173d80}
+body[data-theme="kente"]{--bg:#f4e6ca;--panel:#fff5dc;--ink:#271b18;--gold:#e0a51e;--green:#14623b;--blue:#52247e}
+body[data-theme="desert"]{--bg:#ead7b7;--panel:#fff1d9;--ink:#3e2a1a;--gold:#c48b3d;--green:#6b7140;--blue:#526078}
+body[data-theme="night"],body.dark{--bg:#101914;--panel:#1b2921;--ink:#f7efd9;--muted:#c0b79e;--gold:#e1b647;--green:#45a875;--blue:#6477d6;--line:#405247}
+header{background:linear-gradient(125deg,#123b2b,#1a6744 55%,#132b5a);color:white;padding:16px 16px 18px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 17px,#ffffff0c 17px 19px);pointer-events:none}
+.brandrow{display:flex;align-items:center;gap:12px;position:relative;z-index:1}.brandrow img{width:56px;height:56px;object-fit:contain;background:white;border-radius:12px;padding:2px}.brand{font-size:24px;font-weight:950;letter-spacing:2px}.tag{font-size:10px;letter-spacing:2px;color:#f6d77c}
+.toggle{display:flex;gap:5px;margin:16px 0 0;position:relative;z-index:1}.toggle button{border:1px solid #ffffff70;background:#ffffff12;color:#fff;border-radius:30px;padding:8px 18px;font-weight:800}.toggle button.active{background:var(--gold);color:#17231b;border-color:var(--gold)}
+main{padding:14px 14px 26px;max-width:760px;margin:auto}.welcome{display:flex;justify-content:space-between;align-items:center;gap:10px}.welcome h1{font-size:23px;margin:8px 0 2px}.date{font-size:12px;color:var(--muted)}.weather{background:var(--panel);border:1px solid var(--line);padding:9px 12px;border-radius:13px;font-size:12px;font-weight:700}
+.search{display:flex;gap:7px;margin:15px 0 13px}.search input{min-width:0;flex:1;border:2px solid var(--green);background:var(--panel);border-radius:13px;padding:14px;font-size:15px;color:var(--ink)}button{font:inherit;cursor:pointer}.search button,.primary{border:0;border-radius:13px;background:var(--red);color:white;font-weight:850;padding:0 16px}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;margin:19px 0 10px}.sectionhead h2{font-size:15px;margin:0;letter-spacing:.5px}.sectionhead small{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.card{min-height:91px;border-radius:15px;padding:12px 10px;text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--ink);box-shadow:0 3px 10px #35220d12;position:relative;overflow:hidden}.card:after{content:"";position:absolute;right:-14px;bottom:-24px;width:65px;height:65px;border:8px solid color-mix(in srgb,var(--gold) 24%,transparent);border-radius:50%}.emoji{font-size:24px;display:block;margin-bottom:5px}.card b{font-size:12px;letter-spacing:.5px}.card small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.strip{display:flex;gap:8px;overflow:auto;padding-bottom:3px}.chip{white-space:nowrap;border:1px solid var(--line);background:var(--panel);border-radius:30px;padding:10px 13px;color:var(--ink);font-weight:700;font-size:12px}
+.feed{display:grid;gap:8px}.feeditem{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:13px;color:var(--ink);text-decoration:none}.feeditem span:first-child{font-size:22px}.feeditem b{display:block;font-size:13px}.feeditem small{color:var(--muted);font-size:11px}
+.money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.money button{padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-align:left;font-size:12px;font-weight:750}
+.panel{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:15px;margin-top:12px}.panel h3{margin:0 0 8px;font-size:14px}.panel p{font-size:12px;color:var(--muted);line-height:1.5;margin:5px 0}
+.row{display:flex;flex-wrap:wrap;gap:7px}.row button,.panel button{border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);padding:9px 11px;font-size:12px;font-weight:700}
+input,select{font:inherit}.settings select{width:100%;padding:11px;border-radius:10px;background:var(--panel);color:var(--ink);border:1px solid var(--line);margin:5px 0 12px}
+footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1px;padding:24px 0 10px}
+.hidden{display:none!important}.notice{font-size:11px;color:var(--muted);padding:6px 2px}
+@media(max-width:380px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome h1{font-size:20px}}
+</style></head>
+<body data-theme="ubuntu">
+<header><div class="brandrow"><img src="duma_logo.jpg" alt="DUMA — Browse the African Way"><div><div class="brand">DUMA</div><div class="tag">BROWSE THE AFRICAN WAY</div></div></div>
+<div class="toggle"><button id="africaBtn" class="active" onclick="setRegion('AFRICA')">AFRICA</button><button id="worldBtn" onclick="setRegion('WORLD')">WORLD</button></div></header>
+<main id="home">
+<div class="welcome"><div><h1 data-i18n="greeting">Sawubona, Mzansi 👋</h1><div class="date" id="dateLine"></div></div><button class="weather" onclick="openUrl('https://www.weathersa.co.za/')">☀ Weather<br><small>Check forecast</small></button></div>
+<form class="search" onsubmit="event.preventDefault();searchNow()"><input id="query" placeholder="Search Africa... or the whole world" aria-label="Search"><button type="submit">GO</button></form>
+<div class="sectionhead"><h2 data-i18n="discover">DISCOVER AFRICA</h2><small id="regionLabel">Africa first</small></div>
+<div class="cards">
+<button class="card" onclick="openUrl('https://www.sabcnews.com/')"><span class="emoji">📰</span><b>NEWS</b><small>African & SA headlines</small></button>
+<button class="card" onclick="openUrl('https://www.musicinafrica.net/')"><span class="emoji">🎶</span><b>MUSIC</b><small>Amapiano & African sounds</small></button>
+<button class="card" onclick="openUrl('https://www.cafonline.com/')"><span class="emoji">⚽</span><b>FOOTBALL</b><small>African football</small></button>
+<button class="card" onclick="openUrl('https://www.labour.gov.za/')"><span class="emoji">💼</span><b>JOBS</b><small>Work & opportunities</small></button>
+<button class="card" onclick="openUrl('https://www.bible.com/')"><span class="emoji">🙏</span><b>PRAYER</b><small>Daily faith & reflection</small></button>
+<button class="card" onclick="openUrl('https://www.nationallottery.co.za/')"><span class="emoji">🎟️</span><b>LOTTO</b><small>Official results & info</small></button>
+</div>
+<div class="sectionhead"><h2>AFRICAN SPOTLIGHT</h2><small>Useful places to start</small></div>
+<div class="strip">
+<button class="chip" onclick="openUrl('https://www.news24.com/')">🇿🇦 SA News</button><button class="chip" onclick="openUrl('https://www.enca.com/')">📺 African Videos</button><button class="chip" onclick="openUrl('https://www.musicinafrica.net/')">🎧 Amapiano</button><button class="chip" onclick="openUrl('https://www.psl.co.za/')">🏟️ PSL</button><button class="chip" onclick="openUrl('https://www.bbc.com/news/world/africa')">🌍 Africa News</button>
+</div>
+<div class="sectionhead"><h2>eKASI COMMUNITY</h2><small>Community topics</small></div>
+<div class="feed">
+<a class="feeditem" href="#" onclick="openSearch('South Africa taxi industry news');return false"><span>🚕</span><span><b>Taxi & transport updates</b><small>Search the latest community transport news</small></span></a>
+<a class="feeditem" href="#" onclick="openSearch('South Africa local football results');return false"><span>⚽</span><span><b>Local soccer</b><small>Fixtures, scores and grassroots football</small></span></a>
+<a class="feeditem" href="#" onclick="openSearch('South Africa township jobs vacancies');return false"><span>📢</span><span><b>Jobs & opportunities</b><small>Find current vacancies and training</small></span></a>
+<a class="feeditem" href="#" onclick="openSearch('South Africa church events near me');return false"><span>⛪</span><span><b>Church & community events</b><small>Discover events in your area</small></span></a>
+</div>
+<div class="sectionhead"><h2>MONEY TOOLS</h2><small>Check official updates</small></div>
+<div class="money">
+<button onclick="openUrl('https://www.sassa.gov.za/')">💳 SASSA payment dates</button>
+<button onclick="openUrl('https://www.nationallottery.co.za/')">🎟️ Lotto results</button>
+<button onclick="openUrl('https://www.dmre.gov.za/')">⛽ Petrol price updates</button>
+<button onclick="openUrl('https://www.xe.com/currencyconverter/convert/?From=USD&To=ZAR')">💱 Rand / Dollar</button>
+<button onclick="openSearch('South Africa prepaid airtime prices')">📱 Airtime prices</button>
+<button onclick="openUrl('https://www.resbank.co.za/')">🏦 SA Reserve Bank</button>
+</div>
+<div class="panel"><h3>🛡️ Mzansi Data Saver</h3><p>Reduce image loading and block large video files while browsing. Turn it on to use less mobile data.</p><div class="row"><button onclick="toggleSaver()">Toggle Data Saver</button><span id="saverState" class="notice">Checking…</span></div></div>
+<div class="panel"><h3>🌙 Loadshedding Mode</h3><p>Switch to a darker, simpler screen to reduce screen brightness and visual effects.</p><button onclick="toggleNight()">Turn on / off</button></div>
+<div class="panel"><h3>🤖 DUMA AI</h3><p>Get a quick summary of the page you're reading, translate it, or search for an answer. Full conversational AI requires a secure AI service connection.</p><div class="row"><button onclick="aiSummary()">Summarise current page</button><button onclick="aiTranslate()">Translate page</button><button onclick="aiAsk()">Ask a question</button></div></div>
+<div class="panel settings"><h3>⚙️ SETTINGS · THEMES & LANGUAGE</h3><p>Choose an African colour palette for the whole home screen.</p><select id="themeSelect" onchange="setTheme(this.value)"><option value="ubuntu">Ubuntu Gold</option><option value="zulu">Zulu Warrior</option><option value="mzansi">Mzansi Green</option><option value="kente">Kente Royal</option><option value="desert">Desert Sand</option><option value="night">Night Safari</option></select>
+<p>App language</p><select id="languageSelect" onchange="setLanguage(this.value)"><option>English</option><option>isiZulu</option><option>isiXhosa</option><option>Sesotho</option><option>Setswana</option><option>Sepedi</option><option>Afrikaans</option><option>Shona</option><option>Swahili</option><option>Yoruba</option><option>French</option></select>
+<p id="languageNote">Language selection updates key home-screen labels. Website content remains in the language provided by each website.</p></div>
+<div class="panel"><h3>📚 SAVED FOR OFFLINE</h3><p>Save an article while browsing, then open it here without data.</p><div id="savedList" class="feed"></div></div>
+<footer>DUMA BROWSER · BROWSE THE AFRICAN WAY</footer>
+</main>
+<script>
+function openUrl(url){if(window.Android&&Android.openUrl)Android.openUrl(url);else location.href=url}
+function openSearch(q){openUrl('https://duckduckgo.com/?q='+encodeURIComponent(q))}
+function searchNow(){var q=document.getElementById('query').value.trim();if(q)openSearch(q)}
+function setRegion(r){document.getElementById('africaBtn').classList.toggle('active',r==='AFRICA');document.getElementById('worldBtn').classList.toggle('active',r==='WORLD');document.getElementById('regionLabel').textContent=r==='AFRICA'?'Africa first':'World results';localStorage.setItem('region',r);document.getElementById('query').placeholder=r==='AFRICA'?'Search Africa... or the whole world':'Search the world...'}
+function setTheme(t){document.body.dataset.theme=t;localStorage.setItem('theme',t)}
+function toggleNight(){var n=document.body.dataset.theme==='night';setTheme(n?'ubuntu':'night');document.getElementById('themeSelect').value=n?'ubuntu':'night'}
+function toggleSaver(){var on=localStorage.getItem('dataSaver')!=='true';localStorage.setItem('dataSaver',String(on));if(window.Android&&Android.setDataSaver)Android.setDataSaver(on);updateSaver()}
+function updateSaver(){var on=localStorage.getItem('dataSaver')==='true';document.getElementById('saverState').textContent=on?'ON · images/video reduced':'OFF'}
+function setLanguage(l){localStorage.setItem('language',l);var greeting={English:'Sawubona, Mzansi 👋',isiZulu:'Sawubona, Mzansi 👋',isiXhosa:'Molo, Mzansi 👋',Sesotho:'Dumela, Mzansi 👋',Setswana:'Dumela, Mzansi 👋',Sepedi:'Thobela, Mzansi 👋',Afrikaans:'Hallo, Mzansi 👋',Shona:'Mhoro, Mzansi 👋',Swahili:'Habari, Afrika 👋',Yoruba:'Ẹ káàbọ̀, Mzansi 👋',French:'Bonjour, Mzansi 👋'};document.querySelector('[data-i18n="greeting"]').textContent=greeting[l]||greeting.English}
+function aiSummary(){if(window.Android&&Android.summarisePage)Android.summarisePage();else alert('Open an article first to summarise it.')}
+function aiTranslate(){var lang=document.getElementById('languageSelect').value;var codes={'English':'en','isiZulu':'zu','isiXhosa':'xh','Sesotho':'st','Setswana':'tn','Sepedi':'nso','Afrikaans':'af','Shona':'sn','Swahili':'sw','Yoruba':'yo','French':'fr'};if(window.Android&&Android.translateCurrentPage)Android.translateCurrentPage(codes[lang]||'zu');else alert('Open a page first.')}
+function aiAsk(){var q=prompt('What would you like DUMA to help you find?');if(q)openSearch(q)}
+function refreshSaved(){var box=document.getElementById('savedList');if(!window.Android||!Android.getSavedArticles){box.innerHTML='<div class="notice">Open the Saved tab to manage articles.</div>';return}var items=JSON.parse(Android.getSavedArticles()||'[]');box.innerHTML='';if(!items.length){box.innerHTML='<div class="notice">No articles saved yet.</div>';return}items.forEach(function(a,i){var d=document.createElement('div');d.className='feeditem';d.innerHTML='<span>📖</span><span><b>'+escapeHtml(a.title||'Saved article')+'</b><small>Available offline</small></span>';d.onclick=function(){Android.openSaved(i)};box.appendChild(d)})}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+document.getElementById('dateLine').textContent=new Intl.DateTimeFormat('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+setTheme(localStorage.getItem('theme')||'ubuntu');document.getElementById('themeSelect').value=localStorage.getItem('theme')||'ubuntu';
+setRegion(localStorage.getItem('region')||'AFRICA');setLanguage(localStorage.getItem('language')||'English');document.getElementById('languageSelect').value=localStorage.getItem('language')||'English';updateSaver();refreshSaved();
+</script></body></html>
