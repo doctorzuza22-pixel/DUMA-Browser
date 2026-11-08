@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
     private void saveCurrentPage(){
         if(webView.getUrl()==null||webView.getUrl().startsWith("file:")){new AlertDialog.Builder(this).setMessage("Open an article first, then tap SAVED.").setPositiveButton("OK",null).show();return;}
         webView.evaluateJavascript("(function(){return JSON.stringify({title:document.title,url:location.href,text:(document.body&&document.body.innerText||'').slice(0,20000)});})()",value->{
-            try{String raw=org.json.JSONTokener.stringToValue(value).toString();JSONObject item=new JSONObject(raw);JSONArray a=savedArray();a.put(item);prefs.edit().putString("saved",a.toString()).apply();new AlertDialog.Builder(this).setTitle("Saved offline").setMessage("This article text is saved on this device and can be read without data.").setPositiveButton("OK",null).show();}
+            try{String raw=(String)new org.json.JSONTokener(value).nextValue();JSONObject item=new JSONObject(raw);JSONArray a=savedArray();a.put(item);prefs.edit().putString("saved",a.toString()).apply();new AlertDialog.Builder(this).setTitle("Saved offline").setMessage("This article text is saved on this device and can be read without data.").setPositiveButton("OK",null).show();}
             catch(Exception e){new AlertDialog.Builder(this).setMessage("Could not save this page.").setPositiveButton("OK",null).show();}
         });
     }
