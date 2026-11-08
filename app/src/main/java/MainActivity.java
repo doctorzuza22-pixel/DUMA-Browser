@@ -1,6 +1,7 @@
 package com.duma.browser;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -153,7 +154,7 @@ public class MainActivity extends Activity {
     }
     private void summarisePage(){
         webView.evaluateJavascript("(function(){var t=(document.body&&document.body.innerText)||'';return JSON.stringify({title:document.title,text:t.slice(0,12000)});})()",value->{
-            try{String decoded=org.json.JSONTokener.stringToValue(value).toString();JSONObject o=new JSONObject(decoded);String text=o.optString("text");String[] sentences=text.split("(?<=[.!?])\\s+");StringBuilder sum=new StringBuilder();for(int i=0;i<Math.min(4,sentences.length);i++){if(sentences[i].trim().length()>25)sum.append(sentences[i].trim()).append("\n\n");}
+            try{String decoded=(String)new org.json.JSONTokener(value).nextValue();JSONObject o=new JSONObject(decoded);String text=o.optString("text");String[] sentences=text.split("(?<=[.!?])\\s+");StringBuilder sum=new StringBuilder();for(int i=0;i<Math.min(4,sentences.length);i++){if(sentences[i].trim().length()>25)sum.append(sentences[i].trim()).append("\n\n");}
                 new AlertDialog.Builder(this).setTitle("DUMA AI · Quick summary").setMessage(sum.length()==0?"There isn't enough readable text on this page to summarise.":sum.toString()).setPositiveButton("Done",null).show();
             }catch(Exception e){new AlertDialog.Builder(this).setTitle("DUMA AI").setMessage("Could not read this page.").setPositiveButton("OK",null).show();}
         });
