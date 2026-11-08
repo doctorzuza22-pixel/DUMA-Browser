@@ -75,12 +75,12 @@ footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1px;pa
 <script>
 function openUrl(url){if(window.Android&&Android.openUrl)Android.openUrl(url);else location.href=url}
 function openSearch(q){openUrl('https://duckduckgo.com/?q='+encodeURIComponent(q))}
-function searchNow(){var q=document.getElementById('query').value.trim();if(q)openSearch(q)}
+function searchNow(){var q=document.getElementById('query').value.trim();if(q){if((localStorage.getItem('region')||'AFRICA')==='AFRICA')q+=' Africa';openSearch(q)}}
 function setRegion(r){document.getElementById('africaBtn').classList.toggle('active',r==='AFRICA');document.getElementById('worldBtn').classList.toggle('active',r==='WORLD');document.getElementById('regionLabel').textContent=r==='AFRICA'?'Africa first':'World results';localStorage.setItem('region',r);document.getElementById('query').placeholder=r==='AFRICA'?'Search Africa... or the whole world':'Search the world...'}
 function setTheme(t){document.body.dataset.theme=t;localStorage.setItem('theme',t)}
 function toggleNight(){var n=document.body.dataset.theme==='night';setTheme(n?'ubuntu':'night');document.getElementById('themeSelect').value=n?'ubuntu':'night'}
 function toggleSaver(){var on=localStorage.getItem('dataSaver')!=='true';localStorage.setItem('dataSaver',String(on));if(window.Android&&Android.setDataSaver)Android.setDataSaver(on);updateSaver()}
-function updateSaver(){var on=localStorage.getItem('dataSaver')==='true';document.getElementById('saverState').textContent=on?'ON · images/video reduced':'OFF'}
+function updateSaver(){var on=(window.Android&&Android.isDataSaver)?Android.isDataSaver():localStorage.getItem('dataSaver')==='true';localStorage.setItem('dataSaver',String(on));document.getElementById('saverState').textContent=on?'ON · images/video reduced':'OFF'}
 function setLanguage(l){localStorage.setItem('language',l);var greeting={English:'Sawubona, Mzansi 👋',isiZulu:'Sawubona, Mzansi 👋',isiXhosa:'Molo, Mzansi 👋',Sesotho:'Dumela, Mzansi 👋',Setswana:'Dumela, Mzansi 👋',Sepedi:'Thobela, Mzansi 👋',Afrikaans:'Hallo, Mzansi 👋',Shona:'Mhoro, Mzansi 👋',Swahili:'Habari, Afrika 👋',Yoruba:'Ẹ káàbọ̀, Mzansi 👋',French:'Bonjour, Mzansi 👋'};document.querySelector('[data-i18n="greeting"]').textContent=greeting[l]||greeting.English}
 function aiSummary(){if(window.Android&&Android.summarisePage)Android.summarisePage();else alert('Open an article first to summarise it.')}
 function aiTranslate(){var lang=document.getElementById('languageSelect').value;var codes={'English':'en','isiZulu':'zu','isiXhosa':'xh','Sesotho':'st','Setswana':'tn','Sepedi':'nso','Afrikaans':'af','Shona':'sn','Swahili':'sw','Yoruba':'yo','French':'fr'};if(window.Android&&Android.translateCurrentPage)Android.translateCurrentPage(codes[lang]||'zu');else alert('Open a page first.')}
