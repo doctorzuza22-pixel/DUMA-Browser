@@ -188,7 +188,7 @@ public class MainActivity extends Activity {
     private String savedHtml(){
         JSONArray a=savedArray();StringBuilder h=new StringBuilder("<html><meta name='viewport' content='width=device-width, initial-scale=1'><body style='font-family:Arial;background:#f5ead2;padding:18px;color:#222'><h2>📚 DUMA SAVED</h2><p>Your saved reading, available offline.</p>");
         if(a.length()==0)h.append("<p>No saved articles yet. Open an article and tap SAVED.</p>");
-        for(int i=0;i<a.length();i++){JSONObject o=a.optJSONObject(i);h.append("<p style='background:#fff8e9;padding:14px;border-radius:12px'><b>").append(escape(o.optString("title"))).append("</b><br><small>").append(escape(o.optString("url"))).append("</small><br><a href='duma-saved:").append(i).append("'>Read offline</a> · <a href='duma-delete:").append(i).append("'>Delete</a></p>");}
+        for(int i=0;i<a.length();i++){JSONObject o=a.optJSONObject(i);h.append("<p style='background:#fff8e9;padding:14px;border-radius:12px'><b>").append(escape(o.optString("title"))).append("</b><br><small>").append(escape(o.optString("url"))).append("</small><br><a href='#' onclick='Android.openSaved(").append(i).append(");return false;'>Read offline</a> · <a href='#' onclick='Android.deleteSaved(").append(i).append(");return false;'>Delete</a></p>");}
         h.append("<p><a href='file:///android_asset/home.html'>Home</a></p></body></html>");return h.toString();
     }
     private String escape(String s){return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;");}
