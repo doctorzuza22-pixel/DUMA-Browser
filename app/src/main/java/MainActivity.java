@@ -172,7 +172,7 @@ public class MainActivity extends Activity {
             if(w==0&&webView.canGoBack())webView.goBack();
             if(w==1&&webView.canGoForward())webView.goForward();
             if(w==2)webView.reload();
-            if(w==3){dataSaver=!dataSaver;prefs.edit().putBoolean("data_saver",dataSaver).apply();webView.getSettings().setLoadsImagesAutomatically(true);new AlertDialog.Builder(this).setMessage("Data Saver "+(dataSaver?"enabled":"disabled")+". Large video files are blocked and automatic images are disabled when enabled.").setPositiveButton("OK",null).show();}
+            if(w==3){dataSaver=!dataSaver;prefs.edit().putBoolean("data_saver",dataSaver).apply();webView.getSettings().setLoadsImagesAutomatically(true);new AlertDialog.Builder(this).setMessage("Data Saver "+(dataSaver?"enabled":"disabled")+". remote images and large video files are blocked when enabled.").setPositiveButton("OK",null).show();}
             if(w==4)webView.evaluateJavascript("document.body.dataset.theme='night';localStorage.setItem('theme','night')",null);
             if(w==5)showHome();
         }).show();
@@ -202,7 +202,7 @@ public class MainActivity extends Activity {
     }
     private class DumaBridge{
         @JavascriptInterface public void openUrl(String url){runOnUiThread(()->navigate(url));}
-        @JavascriptInterface public void setDataSaver(boolean on){runOnUiThread(()->{dataSaver=on;prefs.edit().putBoolean("data_saver",on).apply();webView.getSettings().setLoadsImagesAutomatically(!on);});}
+        @JavascriptInterface public void setDataSaver(boolean on){runOnUiThread(()->{dataSaver=on;prefs.edit().putBoolean("data_saver",on).apply();webView.getSettings().setLoadsImagesAutomatically(true);});}
         @JavascriptInterface public String getSavedArticles(){return savedArray().toString();}
         @JavascriptInterface public boolean isDataSaver(){return dataSaver;}
         @JavascriptInterface public void openSaved(int index){runOnUiThread(()->openSavedArticle(index));}
