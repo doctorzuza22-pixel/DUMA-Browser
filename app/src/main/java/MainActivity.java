@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
         webView.setBackgroundColor(Color.rgb(245,234,210));
         WebSettings s=webView.getSettings();
-        s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setLoadsImagesAutomatically(!dataSaver);
+        s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setLoadsImagesAutomatically(true);
         s.setSupportZoom(true); s.setBuiltInZoomControls(true); s.setDisplayZoomControls(false);
         s.setMediaPlaybackRequiresUserGesture(true);
         webView.setWebViewClient(new WebViewClient(){
@@ -107,7 +107,7 @@ public class MainActivity extends Activity {
             @Override public WebResourceResponse shouldInterceptRequest(WebView view,WebResourceRequest request){
                 if(dataSaver){
                     String u=request.getUrl().toString().toLowerCase();
-                    if(u.matches(".*\\.(mp4|webm|m3u8|mov|avi)(\\?.*)?$"))
+                    if(!u.startsWith("file:") && u.matches(".*\\.(jpg|jpeg|png|gif|webp|mp4|webm|m3u8|mov|avi)(\\?.*)?$"))
                         return new WebResourceResponse("text/plain","utf-8",new java.io.ByteArrayInputStream(new byte[0]));
                 }
                 return super.shouldInterceptRequest(view,request);
@@ -172,7 +172,7 @@ public class MainActivity extends Activity {
             if(w==0&&webView.canGoBack())webView.goBack();
             if(w==1&&webView.canGoForward())webView.goForward();
             if(w==2)webView.reload();
-            if(w==3){dataSaver=!dataSaver;prefs.edit().putBoolean("data_saver",dataSaver).apply();webView.getSettings().setLoadsImagesAutomatically(!dataSaver);new AlertDialog.Builder(this).setMessage("Data Saver "+(dataSaver?"enabled":"disabled")+". Large video files are blocked and automatic images are disabled when enabled.").setPositiveButton("OK",null).show();}
+            if(w==3){dataSaver=!dataSaver;prefs.edit().putBoolean("data_saver",dataSaver).apply();webView.getSettings().setLoadsImagesAutomatically(true);new AlertDialog.Builder(this).setMessage("Data Saver "+(dataSaver?"enabled":"disabled")+". Large video files are blocked and automatic images are disabled when enabled.").setPositiveButton("OK",null).show();}
             if(w==4)webView.evaluateJavascript("document.body.dataset.theme='night';localStorage.setItem('theme','night')",null);
             if(w==5)showHome();
         }).show();
@@ -204,6 +204,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void openUrl(String url){runOnUiThread(()->navigate(url));}
         @JavascriptInterface public void setDataSaver(boolean on){runOnUiThread(()->{dataSaver=on;prefs.edit().putBoolean("data_saver",on).apply();webView.getSettings().setLoadsImagesAutomatically(!on);});}
         @JavascriptInterface public String getSavedArticles(){return savedArray().toString();}
+        @JavascriptInterface public boolean isDataSaver(){return dataSaver;}
         @JavascriptInterface public void openSaved(int index){runOnUiThread(()->openSavedArticle(index));}
         @JavascriptInterface public void deleteSaved(int index){runOnUiThread(()->{JSONArray old=savedArray();JSONArray next=new JSONArray();for(int i=0;i<old.length();i++)if(i!=index)next.put(old.opt(i));prefs.edit().putString("saved",next.toString()).apply();showSaved();});}
         @JavascriptInterface public void summarisePage(){runOnUiThread(()->summarisePage());}
