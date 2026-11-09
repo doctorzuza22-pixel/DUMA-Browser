@@ -8,6 +8,7 @@
         android:label="DUMA Browser"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:usesCleartextTraffic="false">
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing" android:value="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
