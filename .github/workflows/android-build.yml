@@ -19,6 +19,34 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.4'
+      - name: Apply original DUMA logo when supplied
+        run: |
+          if [ -f duma_logo.jpg ]; then
+            python -m pip install --quiet pillow
+            python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          import shutil
+          source = Path("duma_logo.jpg")
+          image = Image.open(source).convert("RGBA")
+          Path("app/src/main/assets").mkdir(parents=True, exist_ok=True)
+          Path("app/src/main/res/drawable-nodpi").mkdir(parents=True, exist_ok=True)
+          shutil.copy2(source, "app/src/main/assets/duma_logo.jpg")
+          shutil.copy2(source, "app/src/main/res/drawable-nodpi/duma_logo.jpg")
+          # Preserve the complete 3:2 logo on a white square; never crop or stretch it.
+          side = 1024
+          image.thumbnail((side, side), Image.Resampling.LANCZOS)
+          square = Image.new("RGBA", (side, side), "white")
+          square.alpha_composite(image, ((side-image.width)//2, (side-image.height)//2))
+          square.save("app/src/main/res/drawable-nodpi/duma_launcher.png", optimize=True)
+          for density, size in {"mdpi":48,"hdpi":72,"xhdpi":96,"xxhdpi":144,"xxxhdpi":192}.items():
+              folder = Path(f"app/src/main/res/mipmap-{density}")
+              folder.mkdir(parents=True, exist_ok=True)
+              square.resize((size,size), Image.Resampling.LANCZOS).save(folder/"ic_launcher.png", optimize=True)
+          PY
+          else
+            echo "Original duma_logo.jpg not uploaded yet; retaining existing logo assets."
+          fi
       - name: Build APK
         run: gradle assembleDebug --stacktrace
       - name: Upload APK
