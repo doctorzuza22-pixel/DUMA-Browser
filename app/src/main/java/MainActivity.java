@@ -87,6 +87,8 @@ public class MainActivity extends Activity {
         webView.setBackgroundColor(Color.rgb(245,234,210));
         WebSettings s=webView.getSettings();
         s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setLoadsImagesAutomatically(true);
+        if(android.os.Build.VERSION.SDK_INT>=26) s.setSafeBrowsingEnabled(true);
+        if(android.os.Build.VERSION.SDK_INT>=21) s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         s.setSupportZoom(true); s.setBuiltInZoomControls(true); s.setDisplayZoomControls(false);
         s.setMediaPlaybackRequiresUserGesture(true);
         webView.setWebViewClient(new WebViewClient(){
@@ -95,6 +97,22 @@ public class MainActivity extends Activity {
                 if("file".equals(u.getScheme())) return false;
                 webView.removeJavascriptInterface("Android");
                 return false;
+            }
+            @Override public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
+                handler.cancel();
+                runOnUiThread(() -> {
+                    status.setText("DUMA SHIELD: Secure connection failed. Page blocked.");
+                    status.setVisibility(View.VISIBLE);
+                });
+            }
+            @Override public void onSafeBrowsingHit(WebView view, WebResourceRequest request, int threatType, android.webkit.SafeBrowsingResponse response) {
+                response.backToSafety(true);
+                runOnUiThread(() -> {
+                    addressBar.setText("");
+                    status.setText("DUMA SHIELD: Dangerous website blocked.");
+                    status.setVisibility(View.VISIBLE);
+                    progress.setVisibility(View.GONE);
+                });
             }
             @Override public void onPageStarted(WebView view,String url,Bitmap icon){
                 progress.setVisibility(View.VISIBLE); progress.setProgress(8); status.setText("DUMA is fetching..."); status.setVisibility(View.VISIBLE);
