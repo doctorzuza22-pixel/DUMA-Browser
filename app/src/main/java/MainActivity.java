@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.webkit.*;
@@ -27,6 +28,8 @@ public class MainActivity extends Activity {
     private TextView status;
     private SharedPreferences prefs;
     private boolean dataSaver;
+    private static final int LEARN_IMAGE_PICKER = 9041;
+    private ValueCallback<Uri[]> learnImageCallback;
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -133,6 +136,15 @@ public class MainActivity extends Activity {
         });
         webView.setWebChromeClient(new WebChromeClient(){
             @Override public void onProgressChanged(WebView view,int p){progress.setProgress(p); if(p>0&&p<100){status.setText("DUMA is fetching...");status.setVisibility(View.VISIBLE);}else if(p==100){progress.setVisibility(View.GONE);status.setVisibility(View.GONE);}}
+            @Override public boolean onShowFileChooser(WebView view,ValueCallback<Uri[]> callback,FileChooserParams params){
+                if(learnImageCallback!=null)learnImageCallback.onReceiveValue(null);
+                learnImageCallback=callback;
+                Intent pick=new Intent(Intent.ACTION_GET_CONTENT);
+                pick.addCategory(Intent.CATEGORY_OPENABLE);
+                pick.setType("image/*");
+                try{startActivityForResult(Intent.createChooser(pick,"Choose homework photo"),LEARN_IMAGE_PICKER);return true;}
+                catch(Exception e){learnImageCallback=null;callback.onReceiveValue(null);return false;}
+            }
         });
         root.addView(webView,new LinearLayout.LayoutParams(-1,0,1));
         LinearLayout bottom=new LinearLayout(this); bottom.setGravity(Gravity.CENTER); bottom.setBackgroundColor(Color.rgb(18,60,43));
@@ -233,6 +245,15 @@ public class MainActivity extends Activity {
         String title=escape(o.optString("title"));String text=escape(o.optString("text")).replace("\n","<br>");
         String page="<html><meta name='viewport' content='width=device-width, initial-scale=1'><body style='font:16px/1.6 Arial;background:#fff8e9;color:#222;padding:20px'><small> DUMA · SAVED OFFLINE</small><h2>"+title+"</h2><p>"+text+"</p></body></html>";
         webView.loadDataWithBaseURL(null,page,"text/html","UTF-8",null);
+    }
+    @Override protected void onActivityResult(int requestCode,int resultCode,Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==LEARN_IMAGE_PICKER && learnImageCallback!=null){
+            Uri[] result=null;
+            if(resultCode==RESULT_OK && data!=null && data.getData()!=null)result=new Uri[]{data.getData()};
+            learnImageCallback.onReceiveValue(result);
+            learnImageCallback=null;
+        }
     }
     @Override public void onBackPressed(){if(webView!=null&&webView.canGoBack())webView.goBack();else showHome();}
 }
