@@ -30,12 +30,13 @@ footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1px;pa
 
 .hidden{display:none!important}.notice{font-size:11px;color:var(--muted);padding:6px 2px}
 @media(max-width:380px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome h1{font-size:20px}}
-</style></head>
+ .learn-entry{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:4px 0 16px;padding:16px;border:0;border-radius:16px;background:linear-gradient(115deg,#073b2b,#0d6847);color:#fff;text-align:left;box-shadow:0 5px 15px #082d1d24}.learn-entry b{display:block;font-size:17px}.learn-entry small{display:block;color:#f4df9d;font-size:11px;margin-top:4px}.learn-entry .learn-mark{background:#e6b93f;color:#17170e;border-radius:12px;padding:11px 13px;font-size:13px;font-weight:950;white-space:nowrap}</style></head>
 <body data-theme="ubuntu">
 <header><div class="toggle"><button id="africaBtn" class="active" onclick="setRegion('AFRICA')">AFRICA</button><button id="worldBtn" onclick="setRegion('WORLD')">WORLD</button></div></header>
 <main id="home">
 <div class="welcome"><div><h1 data-i18n="greeting">Sawubona, Mzansi 👋</h1><div class="date" id="dateLine"></div></div><button class="weather" onclick="openUrl('https://www.weathersa.co.za/')">☀ WEATHER <small>Open forecast</small></button></div>
 <form class="search" onsubmit="event.preventDefault();searchNow()"><input id="query" placeholder="Search Africa... or the whole world" aria-label="Search"><button type="submit">GO</button></form>
+<a class="learn-entry" href="learn.html"><span><b>📚 LEARN WITH DUMA</b><small>Grade 1 · Matric · TVET · University</small></span><span class="learn-mark">OPEN LEARN →</span></a>
 <div class="sectionhead"><h2 data-i18n="discover">DISCOVER AFRICA</h2><small id="regionLabel">Africa first</small></div>
 <div class="cards">
 <button class="card" onclick="openUrl('https://www.sabcnews.com/')"><span class="emoji">📰</span><b data-label="news">NEWS</b><small>African & SA headlines</small></button>
