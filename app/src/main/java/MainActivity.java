@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
     private String cleanUrl(String raw){try{Uri u=Uri.parse(raw);String h=u.getHost();return h==null?raw:h+(u.getPath()!=null&&!u.getPath().equals("/")?u.getPath():"");}catch(Exception e){return raw;}}
     private void attachBridge(){webView.addJavascriptInterface(new DumaBridge(),"Android");}
     private void showHome(){attachBridge();addressBar.setText("");webView.loadUrl("file:///android_asset/home.html");}
-    private void newJourney(){showHome();}
+    private void newJourney(){showHome();webView.postDelayed(()->webView.evaluateJavascript("document.getElementById('query')?.focus()",null),350);}
     private void navigate(String input){
         String v=input==null?"":input.trim();if(v.isEmpty())return;
         String target;
