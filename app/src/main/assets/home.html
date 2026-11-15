@@ -32,8 +32,7 @@ footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1px;pa
 @media(max-width:380px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome h1{font-size:20px}}
 </style></head>
 <body data-theme="ubuntu">
-<header><div class="brandrow"><img src="duma_logo.jpg" alt="DUMA — Browse the African Way"><div><div class="brand">DUMA</div><div class="tag">BROWSE THE AFRICAN WAY</div></div></div>
-<div class="toggle"><button id="africaBtn" class="active" onclick="setRegion('AFRICA')">AFRICA</button><button id="worldBtn" onclick="setRegion('WORLD')">WORLD</button></div></header>
+<header><div class="toggle"><button id="africaBtn" class="active" onclick="setRegion('AFRICA')">AFRICA</button><button id="worldBtn" onclick="setRegion('WORLD')">WORLD</button></div></header>
 <main id="home">
 <div class="welcome"><div><h1 data-i18n="greeting">Sawubona, Mzansi 👋</h1><div class="date" id="dateLine"></div></div><button class="weather" onclick="openUrl('https://www.weathersa.co.za/')">☀ WEATHER <small>Open forecast</small></button></div>
 <form class="search" onsubmit="event.preventDefault();searchNow()"><input id="query" placeholder="Search Africa... or the whole world" aria-label="Search"><button type="submit">GO</button></form>
