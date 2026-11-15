@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
@@ -47,30 +48,28 @@ public class MainActivity extends Activity {
         header.setPadding(dp(10),dp(7),dp(10),dp(7));
         header.setBackgroundColor(Color.rgb(18,60,43));
 
-        TextView brand = new TextView(this);
-        brand.setText("DUMA");
-        brand.setTextColor(Color.WHITE);
-        brand.setTextSize(20);
-        brand.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
-        brand.setPadding(0,0,dp(8),0);
-        header.addView(brand);
-
+        ImageView logo = new ImageView(this);
+        try (java.io.InputStream logoStream = getAssets().open("duma_logo.jpg")) {
+            Bitmap logoBitmap = BitmapFactory.decodeStream(logoStream);
+            if (logoBitmap != null) {
+                logo.setImageBitmap(logoBitmap);
+                logo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                logo.setBackgroundColor(Color.WHITE);
+                header.addView(logo,new LinearLayout.LayoutParams(dp(68),dp(54)));
+            }
+        } catch (Exception ignored) { }
+        if (header.getChildCount() == 0) {
+            TextView fallback = new TextView(this);
+            fallback.setText("DUMA");
+            fallback.setTextColor(Color.WHITE);
+            fallback.setTextSize(20);
+            fallback.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+            header.addView(fallback);
+        }
         addressBar = new EditText(this);
+        addressBar.setVisibility(View.GONE);
         addressBar.setSingleLine(true);
-        addressBar.setTextSize(14);
-        addressBar.setHint("Search Africa... or the whole world");
-        addressBar.setHintTextColor(Color.LTGRAY);
-        addressBar.setTextColor(Color.WHITE);
-        addressBar.setSelectAllOnFocus(true);
-        addressBar.setPadding(dp(12),0,dp(12),0);
-        addressBar.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(224,173,53)));
         addressBar.setImeOptions(EditorInfo.IME_ACTION_GO);
-        header.addView(addressBar,new LinearLayout.LayoutParams(0,dp(42),1));
-        Button go = new Button(this); go.setText("GO"); go.setTextSize(12);
-        go.setTextColor(Color.WHITE); go.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(183,43,53)));
-        header.addView(go);
-        go.setOnClickListener(v -> navigate(addressBar.getText().toString()));
-        addressBar.setOnEditorActionListener((v,id,event)->{ if(id==EditorInfo.IME_ACTION_GO||id==EditorInfo.IME_ACTION_SEARCH){navigate(addressBar.getText().toString());return true;}return false;});
         root.addView(header);
 
         progress = new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);
@@ -137,7 +136,7 @@ public class MainActivity extends Activity {
         });
         root.addView(webView,new LinearLayout.LayoutParams(-1,0,1));
         LinearLayout bottom=new LinearLayout(this); bottom.setGravity(Gravity.CENTER); bottom.setBackgroundColor(Color.rgb(18,60,43));
-        addBottom(bottom,"HOME",this::showHome); addBottom(bottom,"AI",this::showAi); addBottom(bottom,"NEW JOURNEY",this::newJourney); addBottom(bottom,"SAVED",this::showSavedMenu); addBottom(bottom,"MENU",this::showMenu);
+        addBottom(bottom,"HOME",this::showHome); addBottom(bottom,"AI",this::showAi); addBottom(bottom,"SEARCH",this::newJourney); addBottom(bottom,"SAVED",this::showSavedMenu); addBottom(bottom,"MENU",this::showMenu);
         root.addView(bottom);
         setContentView(root);
     }
