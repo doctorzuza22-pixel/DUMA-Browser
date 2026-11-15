@@ -21,6 +21,7 @@ jobs:
           gradle-version: '8.4'
       - name: Generate safe-area DUMA launcher icons from bundled logo
         run: |
+          set -euo pipefail
           python -m pip install --quiet pillow
           python - <<'PY'
           from PIL import Image
@@ -30,7 +31,6 @@ jobs:
               raise SystemExit("Required DUMA logo is missing: app/src/main/assets/duma_logo.jpg")
           image = Image.open(source).convert("RGBA")
           side = 1024
-          # Keep the full wordmark and tagline inside Android's adaptive-icon safe area.
           image.thumbnail((int(side * 0.70), int(side * 0.70)), Image.Resampling.LANCZOS)
           square = Image.new("RGBA", (side, side), "white")
           square.alpha_composite(image, ((side-image.width)//2, (side-image.height)//2))
@@ -40,13 +40,19 @@ jobs:
           for density, size in {"mdpi":48,"hdpi":72,"xhdpi":96,"xxhdpi":144,"xxxhdpi":192}.items():
               folder = Path(f"app/src/main/res/mipmap-{density}")
               folder.mkdir(parents=True, exist_ok=True)
+              # Android treats .jpg and .png with the same resource basename as duplicates.
+              # Remove legacy launcher image formats before writing the canonical PNG.
+              for legacy in folder.glob("ic_launcher.*"):
+                  if legacy.suffix.lower() in {".jpg", ".jpeg", ".webp"}:
+                      legacy.unlink()
               square.resize((size,size), Image.Resampling.LANCZOS).save(folder / "ic_launcher.png", optimize=True)
           PY
       - name: Build APK
         run: gradle assembleDebug --stacktrace
       - name: Upload APK
-        if: always()
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: DUMA-Browser-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
